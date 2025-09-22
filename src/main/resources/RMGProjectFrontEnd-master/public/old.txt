@@ -1,0 +1,321 @@
+
+//Users.jsx
+import React,{useState,useEffect} from "react";
+import '../CSS/Project.css';
+import { Formik,Form, Field,ErrorMessage} from 'formik'
+import * as Yup from 'yup'
+import {addProject,getProjects,deleteProject,updateProject,loadProjectsNameAndId} from './../Services/ProjectService' 
+import {addEmployeeapi,getAllEmployes} from './../Services/UserService'
+import Modal from 'react-modal'
+import Pagination from "react-js-pagination";
+import { ToastContainer, toast } from 'react-toastify';
+import { useHistory, Link } from 'react-router-dom';
+import EmployeeTable from "./EmployeeTable";
+
+Modal.setAppElement('#root')
+const UserComp = ()=>{
+    const [projects,setProjects] = useState([])
+    const [modelIsOpen,setmodelIsOpen]= useState(false)
+   
+    const [employee,setEmployee] = useState({empName:'',mobileNo:'',email:'',dob:'',experience:'',username:'',project:'',designation:''})
+	const [empList,setEmpList] = useState([])
+	
+	// Pagination
+	const [totalPages,setTotalPages]= useState(0)
+	const [itemsCountPerPage,SetItemsCountPerPage] = useState(0)
+	const [totalItemsCount,SetTotalItemsCount] = useState(0)
+	const [activePage,SetActivePage] = useState(1)
+
+    const history = useHistory();
+
+	
+
+    const customStyles = {
+        content : {
+          top                   : '50%',
+          left                  : '50%',
+          right                 : 'auto',
+          bottom                : 'auto',
+          marginRight           : '-50%',
+          transform             : 'translate(-50%, -50%)',
+          width                 : '40%'
+        }
+      };
+
+    const addEmployee =(event)=>{
+        event.preventDefault();
+       
+        addEmployeeapi(employee)
+        .then(()=>{
+            toast.success('User '+employee.empName+' Successfuly Created')
+            refereshEmpList()
+            setmodelIsOpen(false)
+        })
+        .catch(()=>{
+            toast.error(employee.empName+'Project Not Added')
+		})
+	}
+	
+	const handlePageChange =(pageNumber) =>{
+		SetActivePage(pageNumber)
+		refereshEmpList(pageNumber)
+	}
+	useEffect(()=>{
+		refreshProjects();
+	},[])
+
+	const refreshProjects=()=>{
+        getProjects()
+        .then(response =>{
+			setProjects(response.data)
+        })
+	  }
+
+
+    useEffect(() => {
+        refereshEmpList(activePage)
+    }, [])
+
+    const refereshEmpList=(activePage)=>{
+        getAllEmployes(activePage)
+        .then((resp)=>{
+			 const tp = resp.data.totalPages
+			setEmpList(resp.data.content)
+			setTotalPages(tp)
+			SetItemsCountPerPage(resp.data.size)
+			SetTotalItemsCount(resp.data.totalElements)
+			console.log('AfterGetEmpList-->'+activePage)
+        })
+        .catch(()=>{
+
+        })
+
+
+
+    }
+
+
+    return(
+     
+    <div class="container">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+						<h2>Manage <b>Employees</b></h2>
+						
+					</div>
+					<div class="col-sm-6">
+						<button class="btn btn-success" data-toggle="modal" onClick={()=>setmodelIsOpen(true)}><i class="material-icons" >&#xE147;</i> <span>Add New Employee</span></button>
+						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
+					</div>
+                </div>
+            </div>
+            <div>
+			<EmployeeTable empList={empList} />
+
+			</div>
+			
+			<Pagination
+						activePage={activePage}
+						itemsCountPerPage={itemsCountPerPage}
+						totalItemsCount={totalItemsCount}
+						pageRangeDisplayed={5}
+						itemClass='page-item'
+						linkClass='btn btn-light'
+						onChange={handlePageChange}
+        			 />
+    </div>
+	{/* <!-- Add Modal HTML --> */}
+    <Modal isOpen={modelIsOpen}  style={customStyles} >
+	
+				<form onSubmit={addEmployee} >
+					<div class="modal-header">						
+						<h4 class="modal-title">Add Employee</h4>
+						<button type="button" class="close" onClick={()=>setmodelIsOpen(false)} data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<div class="form-group">
+							<label>Name</label>
+							<input type="text" class="form-control" onChange={(e)=>{setEmployee({...employee,empName:e.target.value})}} required />
+						</div>
+						<div class="form-group">
+							<label>Email</label>
+							<input type="email" class="form-control" onChange={(e)=>{setEmployee({...employee,email:e.target.value})}} required />
+						</div>
+						<div class="form-group">
+							<label>Phone</label>
+							<input type="text" class="form-control" onChange={(e)=>{setEmployee({...employee,mobileNo:e.target.value})}} required />
+						</div>	
+                        <div class="form-group">
+							<label>Username</label>
+							<input type="text" class="form-control" onChange={(e)=>{setEmployee({...employee,username:e.target.value})}} required />
+						</div>
+                        <div class="form-group">
+							<label>Designation</label>
+							<input type="text" class="form-control" onChange={(e)=>{setEmployee({...employee,designation:e.target.value})}} required />
+						</div>
+                        <div class="form-group">
+							<label>Experience</label>
+							<input type="text" class="form-control" onChange={(e)=>{setEmployee({...employee,experience:e.target.value})}} required />
+						</div>		
+                        <div class="form-group">
+							<label class="col-sm-2 col-form-label">Project</label>
+							<select name="project" value="Select Project"  onChange={(e)=>{setEmployee({...employee,project:e.target.value})}}
+                            onBlur={(e)=>{setEmployee({...employee,project:e.target.value})}}>
+                                
+                                  {projects.map((e, key) => <option key={key} value={e.projectId}>{e.projectName}</option>)} 
+                            </select>
+						</div>	
+										
+					</div>
+					<div class="modal-footer">
+						<input type="button" onClick={()=>setmodelIsOpen(false)} class="btn btn-default" data-dismiss="modal" value="Cancel" />
+						<input type="submit" class="btn btn-success" value="Add" />
+					</div>
+				</form>
+	
+    </Modal>
+	{/* <!-- Edit Modal HTML --> */}
+	<div id="editEmployeeModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form>
+					<div class="modal-header">						
+						<h4 class="modal-title">Edit Employee</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<div class="form-group">
+							<label>Name</label>
+							<input type="text" class="form-control" required />
+						</div>
+						<div class="form-group">
+							<label>Email</label>
+							<input type="email" class="form-control" required />
+						</div>
+						<div class="form-group">
+							<label>Address</label>
+							<textarea class="form-control" required></textarea>
+						</div>
+						<div class="form-group">
+							<label>Phone</label>
+							<input type="text" class="form-control" required />
+						</div>					
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+						<input type="submit" class="btn btn-info" value="Save" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	{/* <!-- Delete Modal HTML --> */}
+	<div id="deleteEmployeeModal" class="modal fade">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form>
+					<div class="modal-header">						
+						<h4 class="modal-title">Delete Employee</h4>
+						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					</div>
+					<div class="modal-body">					
+						<p>Are you sure you want to delete these Records?</p>
+						<p class="text-warning"><small>This action cannot be undone.</small></p>
+					</div>
+					<div class="modal-footer">
+						<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+						<input type="submit" class="btn btn-danger" value="Delete" />
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+    )
+}
+
+export default UserComp;
+
+//user.jsx
+import React,{useEffect} from 'react';
+import '../CSS/SideBar.css' 
+import {BrowserRouter as Router,Route,Switch,Link} from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import Logo from './Logo';
+
+const SideBar = (propsnm) =>{
+    const history = useHistory();
+    useEffect(()=>{
+        history.push("/welcome")
+    },[])
+
+    const titleClick=()=>{
+        history.push("/welcome")
+    }
+    //added
+    const logoSrc = '../../logo1.jpg'; 
+    const logoAlt = 'Your Logo Alt Text';
+
+    const logout =()=>{
+        localStorage.removeItem('username')
+        localStorage.removeItem('role')
+        window.location.reload(false)
+    }
+
+    return(
+        <nav id="sidebar">
+            <div className="sidebar-header" onClick={titleClick}>
+                <div style={{}}  className="app-container">
+                <Logo  src={logoSrc} alt={logoAlt} />
+
+      {/* Your other components and content go here */}
+    </div>
+                
+            </div>
+
+            <ul className="list-unstyled components">
+                <p>Menu</p>
+                <li>
+                    <Link onClick={titleClick}>Home</Link>
+                </li>
+                <li>
+                    <Link onClick={()=>{history.push(`/dashboard/projects`)}}>Projects</Link>
+                </li>
+                <li>
+                <Link to="/dashboard/users">Users</Link>
+                </li>
+                <li>
+                <Link to="/dashboard/settings">Settings</Link>
+                </li>
+                <li>
+                <Link onClick={logout}>Logout</Link>
+                </li>
+            </ul>
+        </nav>
+    )
+}
+
+export default SideBar
+
+//header.jsx
+import React,{useState, useEffect} from 'react';
+import '../CSS/SideBar.css' 
+
+const Header = (props)=>{
+    
+  
+
+    return(
+      
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                <div className="container-fluid">
+                    <h2>Welcome To Project Management System</h2>
+                </div>
+            </nav>
+  
+        
+    )
+}
+export default Header

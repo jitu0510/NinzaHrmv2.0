@@ -1,0 +1,175 @@
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  overflow: hidden;
+  }
+  
+  .chat-box {
+  display: flex;
+  flex: 1;
+  border: 1px solid #ddd;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .member-list {
+  width: 250px;
+  border-right: 1px solid #ddd;
+  background: #fafafa;
+  overflow-y: auto;
+  }
+  
+  .member-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  }
+  
+  .member {
+  padding: 15px;
+  cursor: pointer;
+  transition: background 0.3s;
+  }
+  
+  .member
+  {
+  background: #f0f0f0;
+  }
+  
+  .member.active {
+  background: #e0e0e0;
+  }
+  
+  .chat-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 10px;
+  background: #fff;
+  overflow: hidden;
+  }
+  
+  .chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 10px;
+  }
+  
+  .message {
+  display: flex;
+  margin-bottom: 15px;
+  align-items: flex-end;
+  }
+  
+  .message.self {
+  justify-content: flex-end;
+  }
+  
+  .message .avatar {
+  width: 35px;
+  height: 35px;
+  background-color: #007bff;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-right: 10px;
+  }
+  
+  .message.self .avatar {
+  margin-left: 10px;
+  margin-right: 0;
+  background-color: #28a745;
+  }
+  
+  .message-data {
+  max-width: 70%;
+  padding: 10px;
+  border-radius: 10px;
+  background: #f1f1f1;
+  word-wrap: break-word;
+  }
+  
+  .message.self .message-data {
+  background: #d4edda;
+  }
+  
+  .send-message {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
+  }
+  
+  .input-message {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-right: 10px;
+  font-size: 16px;
+  }
+  
+  .send-button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+  }
+  
+  .send-button
+  {
+  background-color: #0056b3;
+  margin-bottom: 16px;
+  }
+  
+  .register {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  background: #fff;
+  }
+  
+  .username-label {
+  font-size: 18px;
+  margin-bottom: 10px;
+  }
+  
+  #user-name {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  }
+  
+  .register button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background 0.3s;
+  }
+  
+  .register button
+  {
+  background-color: #0056b3;
+  }

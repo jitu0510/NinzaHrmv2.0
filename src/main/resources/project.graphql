@@ -1,0 +1,39 @@
+schema{
+query: Query
+mutation: Mutation
+}
+
+type Query{
+getAllProjects : [Project]
+findProject(projectId: String) : Project
+findEmployees(projectId : String) : [Employee]
+}
+
+
+type Project{
+projectId : String
+projectName : String
+teamSize : Int
+createdBy : String
+createdOn : String
+status : String
+}
+
+type Employee{
+empId : String
+empName : String
+mobileNo : String
+email : String
+dob : String
+experience : String
+username : String
+designation : String
+password : String
+role : String
+project : String
+}
+
+type Mutation {
+  addProject(projectId: String, projectName: String, teamSize: Int, createdBy: String, createdOn: String, status: String): Project
+  updateProject(projectId: String, projectName: String, teamSize: Int, createdBy: String, createdOn: String, status: String): Project
+}

@@ -1,0 +1,11 @@
+.phone-input-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .country-code-select {
+    margin-right: 10px; /* Adjust the margin as needed */
+    width: 100px; /* Adjust the width as needed */
+    margin-top: -15px;
+  }
+  
