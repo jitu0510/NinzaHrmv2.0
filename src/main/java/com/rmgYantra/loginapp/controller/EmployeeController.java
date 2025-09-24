@@ -220,7 +220,7 @@ public class EmployeeController {
 		}
 	}
 	
-	@GetMapping("/employee/getExperience")
+	@GetMapping("/employee/getExperiences")
 	@ApiOperation(value = "Api to get employee experiences")
 	public ResponseEntity<?> getEmployeesExperience(){
 		log.debug("GET  /employee/getExperience called ");
