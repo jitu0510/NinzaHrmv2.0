@@ -91,22 +91,6 @@ public class AuthenticationController {
 			log.error("Error {}",e.getMessage());
 			return new ResponseEntity<Object>("Invalid Credentials",HttpStatus.UNAUTHORIZED);
 		}
-//		String userName = loginRequest.getUsername();
-//		String password = loginRequest.getPassword();
-//
-//		try {
-//			HttpClient httpClient = HttpClients.createDefault();
-//			String accessToken = getAccessToken(httpClient,userName,password);
-//			JSONObject jsonObject = new JSONObject(accessToken);
-//			jsonObject.put("username", "rmgyantra");
-//			jsonObject.put("role", "ROLE_ADMIN");
-//			return new ResponseEntity(jsonObject.toString(),HttpStatus.OK);
-//		}catch (Exception e) {
-//			e.printStackTrace();
-//			return new ResponseEntity<Object>("Invalid Credentials",HttpStatus.FORBIDDEN);
-//		}
-
-
 	}
 	@PostMapping("/refresh")
 	public ResponseEntity<Object> refreshToken(@RequestBody String refreshToken){
@@ -118,6 +102,8 @@ public class AuthenticationController {
 			return new ResponseEntity("Invalid or Expired Refresh Token",HttpStatus.BAD_REQUEST);
 		}
 	}
+
+
 
 	private String getAccessToken(HttpClient httpClient,String userName,String password) throws Exception {
 		/*HttpPost httpPost = new HttpPost(KEYCLOAK_URL + "/protocol/openid-connect/token");
