@@ -64,6 +64,6 @@ export const updateEmployee=(employeeId,updatedBody)=>{
     return Axios.put(`/employees/${employeeId}`,updatedBody);
 }
 export const getEmployeesExperienceData = () => {
-    return Axios.get(`http://49.249.28.218:8091/employee/getExperience`);
+    return Axios.get(`http://49.249.28.218:8091/employee/getExperiences`);
 }
 

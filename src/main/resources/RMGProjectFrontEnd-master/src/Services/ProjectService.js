@@ -9,7 +9,7 @@ const port=process.env.REACT_APP_APP_PORT;
 
 
 export const addProject = (project) => {
-    return Axios.post(`/addProjects`, project);
+    return Axios.post(`/addProject`, project);
 }
 
 export const getProjects = () => {

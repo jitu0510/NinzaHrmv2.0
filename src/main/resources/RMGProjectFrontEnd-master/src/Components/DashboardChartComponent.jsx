@@ -34,7 +34,6 @@ const ChartComponent = () => {
     axios
       .get(`http://49.249.28.218:8091/project-status-data`)
       .then((response) => {
-        // Assuming your API response structure matches the provided example
         setPiedata([
           { name: "Created", value: response.data.created },
           { name: "Ongoing", value: response.data.onGoing },
